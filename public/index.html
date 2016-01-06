@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <title>Mi Casa</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  <script src="js/bootstrap.js"></script>
+
+  </head>
+  <body>
+    <div class="col col-sm-8">
+        <div class="container" align="center">
+          <h1>Mi Casa</i></h1>
+
+          <span>Alarma: </span>
+          <button type="button" id="button2" value="button2" style= "color:white" class="btn btn-success" onclick="setAlarma('button2')";>Activar</button><br><br>
+
+          <span>Luz Amarilla: </span>
+          <button type="button" id="button1" value="button1" style= "color:white" class="btn btn-danger" onclick="setLuzAmarilla('button1')";>Apagado</button><br><br>
+
+          <span>Ventilador: </span>
+          <button type="button" id="button3" value="button3" style= "color:white" class="btn btn-danger" onclick="setVentilador('button3')";>Apagado</button><br><br>
+
+          <span>Servo: </span>
+          <button type="button" id="button4" value="button4" style= "color:white" class="btn btn-danger" onclick="setServo('button4')";>Apagado</button><br><br>
+
+          <span>Actuador 5: </span>
+          <button type="button" id="button5" value="button5" style= "color:white" class="btn btn-danger" onclick="setActuador5('button5')";>Apagado</button><br><br>
+
+          <button type="button" id="apagarAll" value="apagarAll" style= "color:white" class="btn btn-warning" onclick="setAutomatico('apagarAll')";>Modo Automático Apagado</button><br><br>
+
+
+        </div>
+    </div>
+
+
+     <script>
+        function setAlarma(btn) {
+            var property = document.getElementById(btn);
+            var state = "prendido";
+            $.post("http://localhost:3000/alarma", {estado: state}, function(result){ });
+        }
+    </script>
+    <script>
+        var count = 1;
+        function setLuzAmarilla(btn) {
+            var count_temp = count;
+            apagarTodo();
+            count = count_temp;
+            var property = document.getElementById(btn);
+            if (count == 0) {
+                property.style.backgroundColor = "#d9534f";
+                property.innerHTML = "Apagado";                
+                count = 1;
+                var state = "apagado";
+                $.post("http://localhost:3000/luz-amarilla", {estado: state}, function(result){
+                });
+            }
+            else {
+                property.style.backgroundColor = "#337ab7";
+                property.innerHTML = "Prendido";                
+                count = 0;
+                var state = "prendido";
+                $.post("http://localhost:3000/luz-amarilla", {estado: state}, function(result){
+                });
+            }
+        }
+    </script>
+    <script>
+        var count3 = 1;
+        function setVentilador(btn) {
+            var count_temp = count3;
+            apagarTodo();
+            count3 = count_temp;
+            var property = document.getElementById(btn);
+            if (count3 == 0) {
+                property.style.backgroundColor = "#d9534f";
+                property.innerHTML = "Apagado";                
+                count3 = 1;
+                var state = "apagado";
+                $.post("http://localhost:3000/ventilador", {estado: state}, function(result){
+                });
+            }
+            else {
+                property.style.backgroundColor = "#337ab7";
+                property.innerHTML = "Prendido";                
+                count3 = 0;
+                var state = "prendido";
+                $.post("http://localhost:3000/ventilador", {estado: state}, function(result){
+                });
+            }
+        }
+    </script>
+
+    <script>
+        var count4 = 1;
+        function setServo(btn) {
+            var count_temp = count4;
+            apagarTodo();
+            count4 = count_temp;
+            var property = document.getElementById(btn);
+            if (count4 == 0) {
+                property.style.backgroundColor = "#d9534f";
+                property.innerHTML = "Apagado";                
+                count4 = 1;
+                var state = "apagado";
+                $.post("http://localhost:3000/servo", {estado: state}, function(result){
+                });
+            }
+            else {
+                property.style.backgroundColor = "#337ab7";
+                property.innerHTML = "Prendido";                
+                count4 = 0;
+                var state = "prendido";
+                $.post("http://localhost:3000/servo", {estado: state}, function(result){
+                });
+            }
+        }
+    </script>
+
+    <script>
+        var count5 = 1;
+        function setActuador5(btn) {
+            var count_temp = count5;
+            apagarTodo();
+            count5 = count_temp;
+            var property = document.getElementById(btn);
+            if (count5 == 0) {
+                property.style.backgroundColor = "#d9534f";
+                property.innerHTML = "Apagado";                
+                count5 = 1;
+                var state = "apagado";
+                $.post("http://localhost:3000/actuador5", {estado: state}, function(result){
+                });
+            }
+            else {
+                property.style.backgroundColor = "#337ab7";
+                property.innerHTML = "Prendido";                
+                count5 = 0;
+                var state = "prendido";
+                $.post("http://localhost:3000/actuador5", {estado: state}, function(result){
+                });
+            }
+        }
+    </script>
+
+    <script>
+        var count6 = 1;
+        function setAutomatico(btn) {
+            var count_temp = count6;
+            apagarTodo();
+            count6 = count_temp;          
+            var property = document.getElementById(btn);
+            if (count6 == 0) {
+                property.style.backgroundColor = "#f0ad4e";
+                property.innerHTML = "Modo Automático Apagado";                
+                count6 = 1;
+
+            }
+            else {
+                property.style.backgroundColor = "#5bc0de";
+                property.innerHTML = "Modo Automático Encendido";                
+                count6 = 0;
+
+            }
+        }
+    </script>
+
+    <script>
+        function apagarTodo() {
+            count = 1;
+            count3 = 1;
+            count4 = 1;
+            count5 = 1;
+            count6 = 1;
+            var state = "apagado";
+            var property1 = document.getElementById("button1");
+            property1.style.backgroundColor = "#d9534f";
+            property1.innerHTML = "Apagado";                
+            $.post("http://localhost:3000/luz-amarilla", {estado: state}, function(result){
+            });
+            var property2 = document.getElementById("button3");
+            property2.style.backgroundColor = "#d9534f";
+            property2.innerHTML = "Apagado";                
+            $.post("http://localhost:3000/ventilador", {estado: state}, function(result){
+            });
+            var property3 = document.getElementById("button4");            
+            property3.style.backgroundColor = "#d9534f";
+            property3.innerHTML = "Apagado";
+            $.post("http://localhost:3000/servo", {estado: state}, function(result){
+            });
+            var property4 = document.getElementById("button5");            
+            property4.style.backgroundColor = "#d9534f";
+            property4.innerHTML = "Apagado";
+            $.post("http://localhost:3000/actuador5", {estado: state}, function(result){
+            });
+            var property5 = document.getElementById("apagarAll");
+            property5.style.backgroundColor = "#f0ad4e";
+            property5.innerHTML = "Modo Automático Apagado"; 
+        }
+    </script>
+  </body>
+</html>
+
