@@ -6,11 +6,11 @@
 //sensor 4: temperatura
 //sensor 5: 
 
-//actuador 1: led azul
-//actuador 2: led amarillo
-//actuador 3: sonido speaker
-//actuador 4: motor
-//actuador 5: 
+//actuador 1: led amarillo
+//actuador 2: led verde
+//actuador 3: sonido speaker timbre
+//actuador 4: sonido speaker alarma
+//actuador 5: motor ventilador
 */
 
 var http = require('http');
@@ -37,6 +37,7 @@ app.get('/', function (req, res) {
 board.on("ready", function() {
   var led_azul = new five.Led(9); // Sensor de luz
   var led_amarilla = new five.Led(10); //Sensor proximidad  
+  var led_verde = new five.Led(4); //Sensor proximidad  
   var piezo = new five.Piezo(5);
   var button = new five.Button(2);
   var photoresistor = new five.Sensor({
@@ -47,6 +48,14 @@ board.on("ready", function() {
     controller: "HCSR04",
     pin: 8
   });
+  var motor = new five.Motor({
+    pin: 11
+  });
+  var temperature = new five.Thermometer({
+    controller: "LM35",
+    pin: "A5"
+  });
+
 
   board.repl.inject({
     pot: photoresistor
@@ -57,6 +66,7 @@ board.on("ready", function() {
   board.repl.inject({
     button: button
   });
+
 
   photoresistor.on("data", function() {
     if (this.value>900) {
@@ -76,7 +86,6 @@ board.on("ready", function() {
   });
   proximity.on("data", function() {
     if (this.cm<10) {
-      led_amarilla.on();
       piezo.play({
         song: "C C C - - - C C C - - - C C C - - - C C C",
         beats: 1 / 4,
@@ -84,11 +93,18 @@ board.on("ready", function() {
       });        
     }
     else{
-      led_amarilla.off();
+
     };
   });
 
+  temperature.on("data", function() {
+    if (this.celsius>26) {
+      motor.start();
+    }
+    else{
 
+    };
+  });
 
 
   app.post('/luz-amarilla', function(req, res) {
@@ -118,11 +134,11 @@ board.on("ready", function() {
 
   app.post('/ventilador', function(req, res) {
     if (req.body.estado == "prendido"){
-      //led_azul.on();
+      motor.start();
       console.log("on ventilador");
     }
     else{
-      //led_azul.off();      
+      motor.stop();
       console.log("off ventilador");
     };
     res.status(200).end();
@@ -142,11 +158,11 @@ board.on("ready", function() {
 
   app.post('/actuador5', function(req, res) {
     if (req.body.estado == "prendido"){
-      //led_azul.on();
+      led_verde.on();
       console.log("on actuador5");
     }
     else{
-      //led_azul.off();      
+      led_verde.off();      
       console.log("off actuador5");
     };
     res.status(200).end();
