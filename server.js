@@ -48,14 +48,15 @@ board.on("ready", function() {
     controller: "HCSR04",
     pin: 8
   });
-  var motor = new five.Motor({
+  /*var motor = new five.Motor({
     pin: 11
-  });
+  });*/
   var temperature = new five.Thermometer({
     controller: "LM35",
     pin: "A5"
   });
-
+  var temporal=this;
+  var estado=0;
 
   board.repl.inject({
     pot: photoresistor
@@ -98,10 +99,24 @@ board.on("ready", function() {
   });
 
   temperature.on("data", function() {
-    if (this.celsius>26) {
-      motor.start();
+    if (this.celsius>25 && estado==0) {
+      temporal.pinMode(11, five.Pin.OUTPUT);
+      temporal.pinMode(12, five.Pin.OUTPUT);
+      temporal.pinMode(3, five.Pin.OUTPUT);
+      temporal.digitalWrite(11, 1);
+      temporal.digitalWrite(12, 0);
+      temporal.digitalWrite(3, 1);
+      
+      
     }
-    else{
+    if(this.celsius<=25 && estado==0){
+      temporal.pinMode(11, five.Pin.OUTPUT);
+      temporal.pinMode(12, five.Pin.OUTPUT);
+      temporal.pinMode(3, five.Pin.OUTPUT);
+      temporal.digitalWrite(11, 1);
+      temporal.digitalWrite(12, 1);
+      temporal.digitalWrite(3, 1);
+     
 
     };
   });
@@ -134,15 +149,42 @@ board.on("ready", function() {
 
   app.post('/ventilador', function(req, res) {
     if (req.body.estado == "prendido"){
-      motor.start();
+      
+      temporal.pinMode(11, five.Pin.OUTPUT);
+      temporal.pinMode(12, five.Pin.OUTPUT);
+      temporal.pinMode(3, five.Pin.OUTPUT);
+      temporal.digitalWrite(11, 1);
+      temporal.digitalWrite(12, 0);
+      temporal.digitalWrite(3, 1);
       console.log("on ventilador");
     }
     else{
-      motor.stop();
+      
+      temporal.pinMode(11, five.Pin.OUTPUT);
+      temporal.pinMode(12, five.Pin.OUTPUT);
+      temporal.pinMode(3, five.Pin.OUTPUT);
+      temporal.digitalWrite(11, 1);
+      temporal.digitalWrite(12, 1);
+      temporal.digitalWrite(3, 1);
       console.log("off ventilador");
+      
     };
     res.status(200).end();
   });
+
+  app.post('/ventAutomatico', function(req, res) {
+    if (req.body.estado == "prendido"){
+      estado=0;
+      console.log("on ventilador automatico");
+    }
+    else{
+           
+      console.log("off ventilador automatico");
+      estado=1;
+    };
+    res.status(200).end();
+  });
+
 
   app.post('/servo', function(req, res) {
     if (req.body.estado == "prendido"){

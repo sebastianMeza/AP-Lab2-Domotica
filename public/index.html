@@ -31,11 +31,15 @@
           <span>Ventilador: </span>
           <button type="button" id="button3" value="button3" style= "color:white" class="btn btn-danger" onclick="setVentilador('button3')";>Apagado</button><br><br>
 
+           <span>Ventilador automático: </span>
+          <button type="button" id="button6" value="button6" style= "color:white" class="btn btn-danger" onclick="setVentAutomatico('button6')";>Apagado</button><br><br>
+
           <span>Servo: </span>
           <button type="button" id="button4" value="button4" style= "color:white" class="btn btn-danger" onclick="setServo('button4')";>Apagado</button><br><br>
 
 
           <button type="button" id="apagarAll" value="apagarAll" style= "color:white" class="btn btn-warning" onclick="setAutomatico('apagarAll')";>Modo Automático Apagado</button><br><br>
+
 
 
         </div>
@@ -99,6 +103,37 @@
             }
         }
     </script>
+
+     <script>
+        var count7 = 1;
+        function setVentAutomatico(btn) {
+            var count_temp = count7;
+            //apagarTodo();
+            count7 = count_temp;
+            var property = document.getElementById(btn);
+            if (count7 == 0) {
+                //$("#button3").show();
+                document.getElementById('button3').disabled=false;
+                property.style.backgroundColor = "#d9534f";
+                property.innerHTML = "Apagado";                
+                count7 = 1;
+                var state = "apagado";
+                $.post("http://localhost:3000/ventAutomatico", {estado: state}, function(result){
+                });
+            }
+            else {
+                // $("#button3").hide();
+                document.getElementById('button3').disabled=true;
+                property.style.backgroundColor = "#337ab7";
+                property.innerHTML = "Prendido";                
+                count7 = 0;
+                var state = "prendido";
+                $.post("http://localhost:3000/ventAutomatico", {estado: state}, function(result){
+                });
+            }
+        }
+    </script>
+
 
     <script>
         var count4 = 1;
