@@ -47,10 +47,10 @@
                     <td><span>Ventilador: </span></td>
                     <td><button type="button" id="button3" value="button3" style= "color:white" class="btn btn-danger" onclick="setVentilador('button3')"; disabled>Apagado</button></td>
                   </tr>
-                  <tr>
+                  <!--<tr>
                     <td><span>Servo: </span></td>
                     <td><button type="button" id="button4" value="button4" style= "color:white" class="btn btn-danger" onclick="setServo('button4')"; disabled>Apagado</button></td>
-                  </tr>
+                  </tr>-->
 
               </table>
             </div>
@@ -191,7 +191,7 @@
                 document.getElementById('button1').disabled=false;
                 document.getElementById('button2').disabled=false;
                 document.getElementById('button3').disabled=false;
-                document.getElementById('button4').disabled=false;
+                //document.getElementById('button4').disabled=false;
                 document.getElementById('button5').disabled=false;
                 var state = "apagado";
                 $.post("http://localhost:3000/automatico", {estado: state}, function(result){
@@ -205,7 +205,7 @@
                 document.getElementById('button1').disabled=true;
                 document.getElementById('button2').disabled=true;
                 document.getElementById('button3').disabled=true;
-                document.getElementById('button4').disabled=true;
+                //document.getElementById('button4').disabled=true;
                 document.getElementById('button5').disabled=true;
                 var state = "prendido";
                 $.post("http://localhost:3000/automatico", {estado: state}, function(result){
@@ -232,11 +232,11 @@
             property2.innerHTML = "Apagado";                
             $.post("http://localhost:3000/ventilador", {estado: state}, function(result){
             });
-            var property3 = document.getElementById("button4");            
+            /*var property3 = document.getElementById("button4");            
             property3.style.backgroundColor = "#d9534f";
             property3.innerHTML = "Apagado";
             $.post("http://localhost:3000/servo", {estado: state}, function(result){
-            });
+            });*/
             var property4 = document.getElementById("button5");            
             property4.style.backgroundColor = "#d9534f";
             property4.innerHTML = "Apagado";
