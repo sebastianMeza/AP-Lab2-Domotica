@@ -56,7 +56,7 @@ board.on("ready", function() {
     pin: "A5"
   });
   var temporal=this;
-  var estado=0;
+  var habilitado=0;
 
   board.repl.inject({
     pot: photoresistor
@@ -70,23 +70,26 @@ board.on("ready", function() {
 
 
   photoresistor.on("data", function() {
-    if (this.value>900) {
+    if (this.value>900 && habilitado==0) {
       led_azul.on();
     }
-    else{
+    else if(this.value<=900 && habilitado==0){
       led_azul.off();
     };
   });
 
   button.on("down", function() {
-    piezo.play({
-      song: "C D F D A - A A A A G G G G - - C D F D G - G G G G F F F F - -",
-      beats: 1 / 4,
-      tempo: 100
-    });
+    if (habilitado==0){
+      piezo.play({
+        song: "C D F D A - A A A A G G G G - - C D F D G - G G G G F F F F - -",
+        beats: 1 / 4,
+        tempo: 100
+      });      
+    };
   });
+
   proximity.on("data", function() {
-    if (this.cm<10) {
+    if (this.cm<10 && habilitado==0) {
       piezo.play({
         song: "C C C - - - C C C - - - C C C - - - C C C",
         beats: 1 / 4,
@@ -99,7 +102,7 @@ board.on("ready", function() {
   });
 
   temperature.on("data", function() {
-    if (this.celsius>25 && estado==0) {
+    if (this.celsius>19 && habilitado==0) {
       temporal.pinMode(11, five.Pin.OUTPUT);
       temporal.pinMode(12, five.Pin.OUTPUT);
       temporal.pinMode(3, five.Pin.OUTPUT);
@@ -109,7 +112,7 @@ board.on("ready", function() {
       
       
     }
-    if(this.celsius<=25 && estado==0){
+    if(this.celsius<=19 && habilitado==0){
       temporal.pinMode(11, five.Pin.OUTPUT);
       temporal.pinMode(12, five.Pin.OUTPUT);
       temporal.pinMode(3, five.Pin.OUTPUT);
@@ -117,7 +120,6 @@ board.on("ready", function() {
       temporal.digitalWrite(12, 1);
       temporal.digitalWrite(3, 1);
      
-
     };
   });
 
@@ -159,7 +161,6 @@ board.on("ready", function() {
       console.log("on ventilador");
     }
     else{
-      
       temporal.pinMode(11, five.Pin.OUTPUT);
       temporal.pinMode(12, five.Pin.OUTPUT);
       temporal.pinMode(3, five.Pin.OUTPUT);
@@ -172,19 +173,18 @@ board.on("ready", function() {
     res.status(200).end();
   });
 
-  app.post('/ventAutomatico', function(req, res) {
+
+  app.post('/automatico', function(req, res) {
     if (req.body.estado == "prendido"){
-      estado=0;
-      console.log("on ventilador automatico");
+      habilitado=0;
+      console.log("on");
     }
     else{
-           
-      console.log("off ventilador automatico");
-      estado=1;
+      console.log("off");
+      habilitado=1;
     };
     res.status(200).end();
   });
-
 
   app.post('/servo', function(req, res) {
     if (req.body.estado == "prendido"){

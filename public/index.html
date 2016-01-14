@@ -11,37 +11,57 @@
 
   <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   <script src="js/bootstrap.js"></script>
+  <style type="text/css">
+    .btn{width: 87px;}
+    #apagarAll{
+        width:auto;
+    }
+    .bla{
+        margin: 0 auto;
+    }
+  </style>
 
   </head>
   <body>
-    <div class="col col-sm-8">
-        <div class="container" align="center">
-          <h1>Mi Casa</i></h1>
+    <div class="container">
+    <div class="row-fluid">
+        <!-- <div class="col col-sm-6 col-sm-offset-3"> -->
+        <div class="col-md-12">
+            <div class="col-md-4"></div>
+            <div class="col-md-4">
+              <h1><span style="display:block;text-align:center;font-family: Calibri;">Mi Casa</i><span></h1>
+              <table class="table table-striped">
+                  <tr>
+                    <td><span>Alarma: </span></td>
+                    <td><button type="button" id="button2" value="button2" style= "color:white" class="btn btn-success" onclick="setAlarma('button2')"; disabled> Activar </button></td>
+                  </tr>
+                  <tr>
+                    <td><span>Luz Amarilla: </span></td>
+                    <td><button type="button" id="button1" value="button1" style= "color:white" class="btn btn-danger" onclick="setLuzAmarilla('button1')"; disabled>Apagado</button></td>
+                  </tr>
+                  <tr>
+                    <td><span>Luz Verde: </span></td>
+                    <td><button type="button" id="button5" value="button5" style= "color:white" class="btn btn-danger" onclick="setActuador5('button5')"; disabled>Apagado</button></td>
+                  </tr>
+                  <tr>
+                    <td><span>Ventilador: </span></td>
+                    <td><button type="button" id="button3" value="button3" style= "color:white" class="btn btn-danger" onclick="setVentilador('button3')"; disabled>Apagado</button></td>
+                  </tr>
+                  <tr>
+                    <td><span>Servo: </span></td>
+                    <td><button type="button" id="button4" value="button4" style= "color:white" class="btn btn-danger" onclick="setServo('button4')"; disabled>Apagado</button></td>
+                  </tr>
 
-          <span>Alarma: </span>
-          <button type="button" id="button2" value="button2" style= "color:white" class="btn btn-success" onclick="setAlarma('button2')";>Activar</button><br><br>
-
-          <span>Luz Amarilla: </span>
-          <button type="button" id="button1" value="button1" style= "color:white" class="btn btn-danger" onclick="setLuzAmarilla('button1')";>Apagado</button><br><br>
-
-          <span>Luz Verde: </span>
-          <button type="button" id="button5" value="button5" style= "color:white" class="btn btn-danger" onclick="setActuador5('button5')";>Apagado</button><br><br>
-
-
-          <span>Ventilador: </span>
-          <button type="button" id="button3" value="button3" style= "color:white" class="btn btn-danger" onclick="setVentilador('button3')";>Apagado</button><br><br>
-
-           <span>Ventilador automático: </span>
-          <button type="button" id="button6" value="button6" style= "color:white" class="btn btn-danger" onclick="setVentAutomatico('button6')";>Apagado</button><br><br>
-
-          <span>Servo: </span>
-          <button type="button" id="button4" value="button4" style= "color:white" class="btn btn-danger" onclick="setServo('button4')";>Apagado</button><br><br>
-
-
-          <button type="button" id="apagarAll" value="apagarAll" style= "color:white" class="btn btn-warning" onclick="setAutomatico('apagarAll')";>Modo Automático Apagado</button><br><br>
-
-
-
+              </table>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-4"></div>
+            <div class="col-md-4" style="text-align:center;">
+                <button type="button" id="apagarAll" value="apagarAll" style= "color:white" class="btn btn-info" onclick="setAutomatico('apagarAll')";>Modo Automático Encendido</button>
+            </div>
+            <div class="col-md-4"></div>
         </div>
     </div>
 
@@ -104,36 +124,6 @@
         }
     </script>
 
-     <script>
-        var count7 = 1;
-        function setVentAutomatico(btn) {
-            var count_temp = count7;
-            //apagarTodo();
-            count7 = count_temp;
-            var property = document.getElementById(btn);
-            if (count7 == 0) {
-                //$("#button3").show();
-                document.getElementById('button3').disabled=false;
-                property.style.backgroundColor = "#d9534f";
-                property.innerHTML = "Apagado";                
-                count7 = 1;
-                var state = "apagado";
-                $.post("http://localhost:3000/ventAutomatico", {estado: state}, function(result){
-                });
-            }
-            else {
-                // $("#button3").hide();
-                document.getElementById('button3').disabled=true;
-                property.style.backgroundColor = "#337ab7";
-                property.innerHTML = "Prendido";                
-                count7 = 0;
-                var state = "prendido";
-                $.post("http://localhost:3000/ventAutomatico", {estado: state}, function(result){
-                });
-            }
-        }
-    </script>
-
 
     <script>
         var count4 = 1;
@@ -188,7 +178,7 @@
     </script>
 
     <script>
-        var count6 = 1;
+        var count6 = 0;
         function setAutomatico(btn) {
             var count_temp = count6;
             apagarTodo();
@@ -198,13 +188,28 @@
                 property.style.backgroundColor = "#f0ad4e";
                 property.innerHTML = "Modo Automático Apagado";                
                 count6 = 1;
+                document.getElementById('button1').disabled=false;
+                document.getElementById('button2').disabled=false;
+                document.getElementById('button3').disabled=false;
+                document.getElementById('button4').disabled=false;
+                document.getElementById('button5').disabled=false;
+                var state = "apagado";
+                $.post("http://localhost:3000/automatico", {estado: state}, function(result){
+                });
 
             }
             else {
                 property.style.backgroundColor = "#5bc0de";
                 property.innerHTML = "Modo Automático Encendido";                
                 count6 = 0;
-
+                document.getElementById('button1').disabled=true;
+                document.getElementById('button2').disabled=true;
+                document.getElementById('button3').disabled=true;
+                document.getElementById('button4').disabled=true;
+                document.getElementById('button5').disabled=true;
+                var state = "prendido";
+                $.post("http://localhost:3000/automatico", {estado: state}, function(result){
+                });                
             }
         }
     </script>
